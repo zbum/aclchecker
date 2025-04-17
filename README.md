@@ -7,7 +7,45 @@
 * `config.toml` has the following configuration options:
   * `server port` - echo server port.
   * `clinet address` - The address of the server to check.
+* example:
+```toml
+[Server]
+ports = [
+    10000,
+    10001,
+    10002,
+    10003,
+    10004,
+    10005,
+    10006,
+    10007,
+    10008,
+    10009,
+    10010,
+]
 
+resetPorts = [
+    10011,
+]
+
+
+[client]
+addresses = [
+    "localhost:10000",
+    "localhost:10001",
+    "localhost:10002",
+    "localhost:10003",
+    "localhost:10004",
+    "localhost:10005",
+    "localhost:10006",
+    "localhost:10007",
+    "localhost:10008",
+    "localhost:10009",
+    "localhost:10010",
+    "localhost:10011",
+    "localhost:10012",
+]
+```
 ## Usage
 * The application will check the network ACLs and print the results to the console.
 * To run the server application, use the following command:
