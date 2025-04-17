@@ -37,16 +37,18 @@ func startTcpClient(address string, channel chan report.Report) {
 
 	if err != nil {
 		fmt.Printf("연결 실패 : %v\n", err)
-		channel <- report.Fail(address, message, err.Error())
+		channel <- report.Fail("connection failed", address, message, err.Error())
 		return
 	} else {
 		defer connection.Close()
 		fmt.Printf("연결 성공 : %s \n", address)
 
+		localAddr := connection.LocalAddr().String()
+
 		_, err := connection.Write([]byte(message))
 		if err != nil {
 			fmt.Printf("송신 실패 : %v\n", err)
-			channel <- report.Fail(address, message, err.Error())
+			channel <- report.Fail(localAddr, address, message, err.Error())
 			return
 		} else {
 			fmt.Printf("송신 성공 : %v\n", message)
@@ -55,12 +57,12 @@ func startTcpClient(address string, channel chan report.Report) {
 		buffer := make([]byte, 50)
 		read, err := connection.Read(buffer)
 		if err != nil {
-			channel <- report.Fail(address, message, err.Error())
+			channel <- report.Fail(localAddr, address, message, err.Error())
 			return
 		}
 		fmt.Printf("수신 성공 : %s\n", string(buffer[:read]))
 
-		channel <- report.Success(address, message, string(buffer[:read]))
+		channel <- report.Success(localAddr, address, message, string(buffer[:read]))
 
 	}
 }

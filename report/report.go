@@ -3,13 +3,15 @@ package report
 import (
 	"github.com/jedib0t/go-pretty/v6/table"
 	"os"
+	"time"
 )
 
 type Report struct {
-	Address string
-	Success bool
-	Sent    string
-	Receive string
+	SrcAddress  string
+	DestAddress string
+	Success     bool
+	Sent        string
+	Receive     string
 }
 
 var reports []Report
@@ -27,31 +29,35 @@ func BuildChannel() chan Report {
 }
 
 func PrettyPrintReport() {
+	time.Sleep(1 * time.Second)
+
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)
-	t.AppendHeader(table.Row{"#", "Address", "SUCCESS", "SENT", "RECEIVE"})
+	t.AppendHeader(table.Row{"#", "Source Address", "Destination Address", "SUCCESS", "SENT", "RECEIVE"})
 	for i, report := range reports {
-		t.AppendRow([]interface{}{i, report.Address, report.Success, report.Sent, report.Receive})
+		t.AppendRow([]interface{}{i, report.SrcAddress, report.DestAddress, report.Success, report.Sent, report.Receive})
 		t.AppendSeparator()
 	}
 
 	t.Render()
+
 }
 
-func Success(address string, sent string, recv string) Report {
+func Success(srcAddress string, destAddress string, sent string, recv string) Report {
 	return Report{
-		Address: address,
-		Success: true,
-		Sent:    sent,
-		Receive: recv,
+		SrcAddress:  srcAddress,
+		DestAddress: destAddress,
+		Success:     true,
+		Sent:        sent,
+		Receive:     recv,
 	}
 }
 
-func Fail(address string, sent string, recv string) Report {
+func Fail(srcAddress string, destAddress string, sent string, recv string) Report {
 	return Report{
-		Address: address,
-		Success: false,
-		Sent:    sent,
-		Receive: recv,
+		SrcAddress:  srcAddress,
+		DestAddress: destAddress,
+		Sent:        sent,
+		Receive:     recv,
 	}
 }
